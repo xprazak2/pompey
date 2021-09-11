@@ -8,7 +8,7 @@ defmodule Pompey.Endpoint do
 
   require Pompey.Routes.Dynamic
 
-  match "/pompey", to: Pompey.Routes.Core
+  forward "/pompey", to: Pompey.Routes.Core
 
   Pompey.Routes.Dynamic.define_routes()
 
