@@ -7,11 +7,10 @@ defmodule Pompey.Endpoint do
   plug :dispatch
 
   require Pompey.Routes.Dynamic
-  alias Pompey.Routes.Dynamic
 
-  Dynamic.define_routes()
+  match "/pompey", to: Pompey.Routes.Core
 
-  forward "/pompey", to: Pompey.Routes.Core
+  Pompey.Routes.Dynamic.define_routes()
 
   match "/*path" do
     send_resp(conn, 404, Jason.encode!(%{ error: "No route for /#{path} found" }))
