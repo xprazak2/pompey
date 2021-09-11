@@ -2,7 +2,7 @@ defmodule Pompey.FileStorage do
   def load do
     case File.read(storage_path()) do
        {:ok, content} -> parse_list(content)
-       err -> err
+       {_, reason} -> {:err, "Failed to read from #{storage_path()}, reason: #{reason}"}
     end
   end
 

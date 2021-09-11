@@ -1,21 +1,11 @@
 # Pompey
 
-**Small, simple and stupid proxy that forwards your requests**
+**Small and simple proxy that forwards your http requests**
 
-Uses macros to generate dynamic routes, so recompile is needed after a new route is added.
+Uses macros to generate dynamic routes. That means recompiling is needed when we want to add new routes.
+There is a minimal API for adding routes into a file storage, see API docs at `/pompey/swaggerui`
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `pompey` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:pompey, "~> 0.1.0"}
-  ]
-end
-```
 
 For development:
 
@@ -24,7 +14,8 @@ mix deps.get
 iex -S mix
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/pompey](https://hexdocs.pm/pompey).
+In Docker:
 
+```
+podman run -p 4001:80 pompey:latest
+```

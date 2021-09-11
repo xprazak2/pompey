@@ -3,10 +3,10 @@ defmodule Pompey.Storage do
 
   @impl true
   def init(_) do
-    # should I load dangerously and let it crash?
-    state = Pompey.FileStorage.safe_load |>
-      Enum.reduce(%{}, fn item, memo -> Map.put(memo, item.name, item) end)
-    {:ok, state}
+    case Pompey.FileStorage.load do
+      {:ok, content } -> {:ok, content |> Enum.reduce(%{}, fn item, memo -> Map.put(memo, item.name, item) end) }
+      {_, reason} -> {:stop, reason}
+    end
   end
 
   @impl true
