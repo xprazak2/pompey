@@ -14,36 +14,40 @@ defmodule Pompey.Routes.Core do
   end
 
   post "/" do
-    # send_resp(conn, 200, conn.body_params |> create_route)
-    new_route = from_params conn.params
-    # require IEx; IEx.pry
-    case new_route do
-       nil -> send_resp(conn, 422, %{error: "Invalid params for new route, expected format: { route: { ...attributes } }"} |> to_resp)
-       {:ok, route} -> send_resp(conn, 201, new_route |> create_route |> to_resp)
+    case conn.params |> from_params do
+       nil -> send_resp(conn, 422, %{error: "Invalid params for new route, expected format: { route: { ...attributes } }" } |> to_resp)
+       {:ok, route} -> handle_create(conn, route)
        {:error, error} -> send_resp(conn, 422, error |> to_error)
     end
   end
 
-  match _ do
-    send_resp(conn, 404, Jason.encode!(%{ error: "I draw blank" }))
+  match "/*path" do
+    send_resp(conn, 404, %{ error: "Not found" } |> Jason.encode!)
   end
 
   defp to_resp(data) do
-    Jason.encode!(%{ result: data })
+    %{ result: data } |> Jason.encode!
   end
 
   defp to_error(data) do
-    Jason.encode!(%{ error: data })
+    %{ error: data } |> Jason.encode!
   end
 
-  defp from_params(%{"route" => route_params } = params) do
-    Pompey.Route.from_params route_params
+  defp handle_create(conn, new_route) do
+    case new_route |> create_route do
+      {:ok, route} -> send_resp(conn, 201, route |> to_resp)
+      {:error, reason} -> send_resp(conn, 422, reason |> to_error)
+    end
+  end
+
+  defp from_params(%{"route" => route_params }) do
+    route_params |> Pompey.Route.from_params
   end
   defp from_params(_) do
     nil
   end
 
   defp create_route(new_route) do
-    Storage.create new_route
+   new_route |>  Storage.create
   end
 end

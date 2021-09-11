@@ -9,7 +9,7 @@ defmodule Pompey.Application do
     children = [
       # Starts a worker by calling: Pompey.Worker.start_link(arg)
       # {Pompey.Worker, arg}
-      {Pompey.Storage, name: Pompey.Storage},
+      {Pompey.Storage, name: Pompey.Storage },
       {Plug.Cowboy, scheme: :http, plug: Pompey.Endpoint, options: [port: Application.get_env(:pompey, :port)]}
     ]
 

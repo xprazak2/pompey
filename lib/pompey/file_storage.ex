@@ -1,8 +1,6 @@
 defmodule Pompey.FileStorage do
-  @file_db "./route_list.json"
-
   def load do
-    case File.read(@file_db) do
+    case File.read(storage_path()) do
        {:ok, content} -> parse_list(content)
        err -> err
     end
@@ -17,9 +15,21 @@ defmodule Pompey.FileStorage do
 
   def save(routes) do
     case routes |> encode_list do
-       {:ok, content} -> File.write(@file_db, content)
+       {:ok, content} -> write_to_file(content)
        {:err, err} -> {:err, err}
     end
+  end
+
+  def write_to_file(content) do
+    file_path = storage_path()
+    case File.write(file_path, content) do
+      :ok -> :ok
+      {_, err} -> {:err, "Failed writing to #{file_path}, reason: #{err}" }
+    end
+  end
+
+  defp storage_path do
+    Application.get_env(:pompey, :storage_path)
   end
 
   defp parse_list(content) do

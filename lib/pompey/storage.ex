@@ -3,6 +3,7 @@ defmodule Pompey.Storage do
 
   @impl true
   def init(_) do
+    # should I load dangerously and let it crash?
     state = Pompey.FileStorage.safe_load |>
       Enum.reduce(%{}, fn item, memo -> Map.put(memo, item.name, item) end)
     {:ok, state}
@@ -18,8 +19,8 @@ defmodule Pompey.Storage do
     new_state = Map.put(state, route.name, route)
 
     case new_state |> Map.values |> Pompey.FileStorage.save do
-      :ok -> {:reply, route, new_state}
-      {:error, _err} -> {:reply, nil, state} #TODO: propagate errors
+      :ok -> {:reply, {:ok, route}, new_state}
+      {_, err} -> {:reply, {:error, err }, state}
     end
   end
 

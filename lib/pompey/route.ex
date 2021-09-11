@@ -34,11 +34,11 @@ defmodule Pompey.Route do
 
   def validate(attrs) do
     errors = %{}
-    errors = validate_presence(errors, attrs, "name")
-    errors = validate_presence(errors, attrs, "url")
-    errors = validate_presence(errors, attrs, "path")
-    if !Enum.member?(@methods, attrs["method"]) do
-      Map.put(errors, "method", "is not one of #{@methods}")
+    errors = validate_presence(errors, attrs, :name)
+    errors = validate_presence(errors, attrs, :url)
+    errors = validate_presence(errors, attrs, :path)
+    if !Enum.member?(@methods, attrs[:method]) do
+      Map.put(errors, :method, "is not one of: #{@methods}")
     else
       errors
     end

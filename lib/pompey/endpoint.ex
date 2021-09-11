@@ -13,7 +13,7 @@ defmodule Pompey.Endpoint do
 
   forward "/pompey", to: Pompey.Routes.Core
 
-  match _ do
-    send_resp(conn, 404, Jason.encode!(%{ error: "I draw blank" }))
+  match "/*path" do
+    send_resp(conn, 404, Jason.encode!(%{ error: "No route for /#{path} found" }))
   end
 end
