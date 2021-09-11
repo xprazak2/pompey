@@ -11,10 +11,6 @@ defmodule Pompey.Endpoint do
 
   Dynamic.define_routes()
 
-  get "/ping" do
-    send_resp(conn, 200, Jason.encode!(%{ result: "pong!"}))
-  end
-
   forward "/pompey", to: Pompey.Routes.Core
 
   match _ do

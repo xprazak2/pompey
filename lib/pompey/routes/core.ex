@@ -14,12 +14,13 @@ defmodule Pompey.Routes.Core do
   end
 
   post "/" do
-    # require IEx; IEx.pry
     # send_resp(conn, 200, conn.body_params |> create_route)
     new_route = from_params conn.params
+    # require IEx; IEx.pry
     case new_route do
-       nil -> send_resp(conn, 422, %{error: "Invalid params for new route"} |> to_resp)
-        _ -> send_resp(conn, 201, new_route |> create_route |> to_resp)
+       nil -> send_resp(conn, 422, %{error: "Invalid params for new route, expected format: { route: { ...attributes } }"} |> to_resp)
+       {:ok, route} -> send_resp(conn, 201, new_route |> create_route |> to_resp)
+       {:error, error} -> send_resp(conn, 422, error |> to_error)
     end
   end
 
@@ -29,6 +30,10 @@ defmodule Pompey.Routes.Core do
 
   defp to_resp(data) do
     Jason.encode!(%{ result: data })
+  end
+
+  defp to_error(data) do
+    Jason.encode!(%{ error: data })
   end
 
   defp from_params(%{"route" => route_params } = params) do

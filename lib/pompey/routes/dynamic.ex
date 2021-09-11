@@ -11,6 +11,7 @@ defmodule Pompey.Routes.Dynamic do
 
   def build_ast(route) do
     escaped_route = Macro.escape route
+    IO.puts "Defining #{route.name} route at #{route.path}"
     quote do
       match(unquote(route.path), via: unquote(String.to_atom route.method)) do
         Pompey.Routes.Dynamic.forward_dynamic_route(var!(conn), unquote(escaped_route))

@@ -24,7 +24,7 @@ defmodule Pompey.FileStorage do
 
   defp parse_list(content) do
     case content |> Jason.decode do
-      {:ok, result} -> {:ok, Enum.map(result, &Pompey.Route.from_params/1)}
+      {:ok, result} -> {:ok, Enum.map(result, &Pompey.Route.from_attrs/1)}
       err -> err
     end
   end
