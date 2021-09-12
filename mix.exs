@@ -27,7 +27,8 @@ defmodule Pompey.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.2"},
       {:httpoison, "~> 1.7"},
-      {:open_api_spex, "~> 3.10"}
+      {:open_api_spex, "~> 3.10"},
+      {:mock, "~> 0.3.0", only: :test}
     ]
   end
 end

@@ -15,5 +15,6 @@ iex -S mix
 In Docker:
 
 ```
+# podman pull docker.io/oprazak/pompey:latest
 podman run -p 4001:4001 pompey:latest
 ```
