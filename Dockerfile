@@ -21,13 +21,16 @@ RUN apk update && \
 FROM alpine:3.14.2
 
 ARG STORAGE_LOCATION="examples/route_list.json"
-
-RUN apk update && \
-    apk add --no-cache bash ncurses-libs
-
 WORKDIR /opt/pompey
 
-COPY --from=builder /build/_build/prod/rel/pompey .
+RUN apk update && \
+    apk add --no-cache bash ncurses-libs && \
+    addgroup -S -g 1001 pompey && \
+    adduser -S pompey -u 1001 -G pompey
+
+USER pompey
+
+COPY --from=builder --chown=pompey:pompey /build/_build/prod/rel/pompey .
 # copy the route list
-COPY --from=builder /build/${STORAGE_LOCATION} ./route_list.json
+COPY --from=builder --chown=pompey:pompey /build/${STORAGE_LOCATION} ./route_list.json
 CMD ["bin/pompey", "start"]
